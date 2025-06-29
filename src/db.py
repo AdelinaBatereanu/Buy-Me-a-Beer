@@ -1,14 +1,21 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
+from typing import Generator
+
 from src.models import Base
-import os
+from src.config import settings
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./db.sqlite3")
-
+def get_db() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 engine = create_engine(
-    DATABASE_URL, 
-    connect_args={"check_same_thread": False}
+    str(settings.database_url), 
+    connect_args={"check_same_thread": False},
+    echo=settings.debug
 )
 
 SessionLocal = sessionmaker(

@@ -1,20 +1,15 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
-from typing import Generator
+import stripe
 
-from src.db import SessionLocal
+from src.db import SessionLocal, get_db
 from src.schemas import User, Donation, DonationCreate
 from src import crud
+from src.config import settings
+from src.payments import router as payments_router
 
-app = FastAPI()
-
-def get_db() -> Generator[Session, None, None]:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+app = FastAPI(debug=settings.debug)
 
 @app.get("/health")
 def read_root():
@@ -36,3 +31,4 @@ def donate(user_input: DonationCreate, db: Session = Depends(get_db)):
     donation = crud.create_donation(db, user, user_input.amount, user_input.message)
     return donation
 
+app.include_router(payments_router)
