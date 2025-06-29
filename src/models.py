@@ -8,18 +8,13 @@ from src.utils import DonationIDGenerator, CustomerIDGenerator
 class Base(DeclarativeBase):
      pass
 
-class User(Base):
-    __tablename__ = "user_account"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
-    email:Mapped[str] = mapped_column(unique=True)
-
 class Donation(Base):
     __tablename__ = "donation"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[str] = mapped_column(ForeignKey("user_account.id"))
+    donor_name: Mapped[Optional[str]]
+    email: Mapped[Optional[str]]
     amount: Mapped[float]
     message: Mapped[Optional[str]]
     timestamp: Mapped[datetime] = mapped_column(default=datetime.now)
+    status: Mapped[str] = mapped_column(default="pending")

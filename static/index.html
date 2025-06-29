@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Buy Me a Beer</title>
+  <script>
+    async function buyBeer() {
+      document.getElementById("status").textContent = "Redirecting to payment…";
+      // Call your backend to get a Stripe checkout URL
+      const resp = await fetch("/create-checkout-session/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          donor_name: null,
+          email:      null,
+          amount:     3.00,
+          message:    "Cheers!"
+        })
+      });
+      const { url } = await resp.json();
+      window.location = url;  // Redirect to Stripe checkout
+    }
+  </script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    #buy { font-size: 1.5rem; padding: 1rem 2rem; }
+    #status { margin-top: 1rem; color: #555; }
+  </style>
+</head>
+<body>
+  <h1>Buy Me a Beer 🍺</h1>
+  <button id="buy" onclick="buyBeer()">Buy a Beer for €3.00</button>
+  <div id="status"></div>
+</body>
+</html>

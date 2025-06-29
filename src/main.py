@@ -1,15 +1,30 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
 from sqlalchemy.orm import Session
 from datetime import datetime
 import stripe
+from typing import List
 
+from src import models
 from src.db import SessionLocal, get_db
-from src.schemas import User, Donation, DonationCreate
+from src.schemas import Donation, DonationCreate
 from src import crud
 from src.config import settings
 from src.payments import router as payments_router
 
 app = FastAPI(debug=settings.debug)
+
+app.include_router(payments_router)
+
+@app.get("/", include_in_schema=False)
+def root():
+    return FileResponse("static/index.html")
+
+@app.get("/success", include_in_schema=False)
+def read_success():
+    return FileResponse("static/success.html")
 
 @app.get("/health")
 def read_root():
@@ -24,11 +39,11 @@ def get_donation(donation_id: int, db: Session = Depends(get_db)):
 
 @app.post("/donate/", response_model=Donation)
 def donate(user_input: DonationCreate, db: Session = Depends(get_db)):
-    user = crud.get_user_by_email(db, user_input.user_email)
-    if not user:
-       user = crud.create_user(db, user_input.user_name, user_input.user_email)
-
-    donation = crud.create_donation(db, user, user_input.amount, user_input.message)
+    donation = crud.create_donation(db, user_input.donor_name, user_input.email, user_input.amount, user_input.message, status="completed")
     return donation
 
-app.include_router(payments_router)
+@app.get("/donations/", response_model=List[Donation])
+def list_donations(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return db.query(models.Donation).offset(skip).limit(limit).all()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")

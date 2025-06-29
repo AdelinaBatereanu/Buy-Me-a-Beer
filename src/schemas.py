@@ -1,21 +1,17 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
-class User(BaseModel):
-    id: int
-    name: str
-    email: EmailStr
-
 class Donation(BaseModel):
     id: int
-    user_id: int
+    donor_name: str | None = None
+    email: str | None = None
     amount: float
     message: str | None = None
     timestamp: datetime
+    status: str
 
 class DonationCreate(BaseModel):
-    user_email: EmailStr
-    user_name: str
+    donor_name: str | None = None
+    email: EmailStr | None = None
     amount: float
     message: str | None = None
-    

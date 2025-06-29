@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     stripe_webhook_secret:  str
 
     model_config = ConfigDict(
-        env_file=".env",
+        env_file="src/.env",
         env_file_encoding="utf-8"
     )
 

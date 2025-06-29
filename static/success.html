@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thank You!</title>
+  <script>
+    async function loadDonation() {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get("session_id");
+      document.getElementById("message").textContent = "Loading payment…";
+      // (Optionally) fetch your backend to show donation details
+      // For now, just thank them:
+      document.getElementById("message").textContent = "Thank you for your support!";
+    }
+    window.onload = loadDonation;
+  </script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+  </style>
+</head>
+<body>
+  <h1>🎉 Thank You! 🎉</h1>
+  <p id="message"></p>
+</body>
+</html>
