@@ -31,7 +31,7 @@ def read_root():
     return {"status": "ok", "service": "BuyMeACoffee"}
 
 @app.get("/donate/{donation_id}", response_model=Donation)
-def get_donation(donation_id: int, db: Session = Depends(get_db)):
+def get_donation(donation_id: str, db: Session = Depends(get_db)):
     donation = crud.get_donation_by_id(db, donation_id)
     if not donation:
         raise HTTPException(404, "Donation not found")

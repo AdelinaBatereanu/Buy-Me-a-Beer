@@ -1,6 +1,7 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import ForeignKey
 from typing import Optional
+import uuid
 from datetime import datetime
 
 from src.utils import DonationIDGenerator, CustomerIDGenerator
@@ -11,7 +12,7 @@ class Base(DeclarativeBase):
 class Donation(Base):
     __tablename__ = "donation"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(primary_key=True, default=lambda: str(uuid.uuid4()))
     donor_name: Mapped[Optional[str]]
     email: Mapped[Optional[str]]
     amount: Mapped[float]

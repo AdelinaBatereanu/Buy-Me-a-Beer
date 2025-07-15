@@ -7,7 +7,7 @@ import os
 from src.config import settings
 from src.schemas import DonationCreate
 from src.db import get_db
-from src.crud import create_donation
+from src.crud import create_donation, create_pending_donation, complete_donation
 
 router = APIRouter(prefix="", tags=["payments"])
 
@@ -23,6 +23,7 @@ def create_checkout_session(
     db: Session = Depends(get_db)
 ):
     try:
+        pending = create_pending_donation(db, d.donor_name, d.email, d.amount, d.message)
         # 1) Create a Stripe Checkout Session
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
@@ -30,18 +31,18 @@ def create_checkout_session(
                 "price_data": {
                     "currency": "eur",
                     "product_data": {"name": "Buy Me a Beer"},
-                    "unit_amount": int(d.amount * 100),  # amount in cents
+                    "unit_amount": int(d.amount * 100),
                 },
                 "quantity": 1,
             }],
             mode="payment",
-            success_url="http://localhost:8000/success?session_id={CHECKOUT_SESSION_ID}",
-            # success_url="http://localhost:8000/donations/",
+            success_url=f"http://localhost:8000/success?donation_id={pending.id}&session_id={{CHECKOUT_SESSION_ID}}",
             cancel_url="http://localhost:8000/index",
             metadata={
                 "donor_name": d.donor_name or "",
                 "email":      d.email or "",
-                "message":    d.message or ""
+                "message":    d.message or "",
+                "donation_id": str(pending.id)
             }
         )
         # 2) Return the URL for the client to redirect to
@@ -78,19 +79,16 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
         # Extract the information we put in metadata
-        donor_name = session["metadata"]["donor_name"] or None
-        email     = session["metadata"]["email"] or None
-        message   = session["metadata"]["message"] or None
-        amount    = session["amount_total"] / 100
+        donation_id = session["metadata"].get("donation_id", "")
 
         # 4) Create the donation with status completed
         try:
-            print("Creating donation...")
-            create_donation(db, donor_name, email, amount, message, status="completed")
-            print("Donation created!")
+            print("Completing donation...")
+            complete_donation(db, donation_id)
+            print("Donation complete!")
         except Exception as e:
-            print("Error creating donation:", e)
-            logging.error(f"Error creating donation: {e}")
+            print("Error completing donation:", e)
+            logging.error(f"Error completing donation: {e}")
 
     # 5) Return a 200 to acknowledge receipt
     return {"status": "success"}

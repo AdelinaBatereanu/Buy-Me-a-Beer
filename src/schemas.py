@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 class Donation(BaseModel):
-    id: int
+    id: str
     donor_name: str | None = None
     email: str | None = None
     amount: float

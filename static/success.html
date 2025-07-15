@@ -4,15 +4,19 @@
   <meta charset="UTF-8" />
   <title>Thank You!</title>
   <script>
-    async function loadDonation() {
-      const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get("session_id");
-      document.getElementById("message").textContent = "Loading payment…";
-      // (Optionally) fetch your backend to show donation details
-      // For now, just thank them:
-      document.getElementById("message").textContent = "Thank you for your support!";
-    }
-    window.onload = loadDonation;
+  async function loadDonation() {
+    const params = new URLSearchParams(window.location.search);
+   const sessionId = params.get("session_id");
+   const donationId = params.get("donation_id");
+    document.getElementById("message").textContent = "Loading payment…";
+   // Next: fetch by sessionId (old way)
+   // const resp = await fetch(`/donations/by-session/${sessionId}`);
+   const resp = await fetch(`/donate/${donationId}`);
+    const donation = await resp.json();
+    document.getElementById("message").textContent =
+      `Thanks! You donated €${donation.amount.toFixed(2)}.`;
+  }
+  window.onload = loadDonation;
   </script>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2rem; }
