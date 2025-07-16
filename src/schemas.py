@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from datetime import datetime
 
 class Donation(BaseModel):
@@ -20,11 +20,9 @@ class DonationCreate(BaseModel):
     amount: float  # Donation amount
     message: str | None = None  # Optional message from donor
 
-    @validator("message")
+    @field_validator("message")
+    @classmethod
     def message_max_length(cls, v):
-        """
-        Validates that the message does not exceed 1000 characters.
-        """
         if v and len(v) > 300:
             raise ValueError("Message must be at most 300 characters")
         return v

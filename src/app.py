@@ -29,14 +29,14 @@ def root(request: Request):
     """
     Render the home page.
     """
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request, "index.html", {})
 
 @app.get("/success", include_in_schema=False)
 def read_success(request: Request):
     """
     Render the success page after a successful donation.
     """
-    return templates.TemplateResponse("success.html", {"request": request})
+    return templates.TemplateResponse(request, "success.html", {})
 
 @app.get("/donations/{donation_id}", response_model=Donation)
 def get_donation(donation_id: str, db: Session = Depends(get_db)):
@@ -79,4 +79,4 @@ def read_cancel(request: Request, donation_id: str = None, db: Session = Depends
         if donation and donation.status == "pending":
             donation.status = "canceled"
             db.commit()
-    return templates.TemplateResponse("cancel.html", {"request": request})
+    return templates.TemplateResponse(request, "cancel.html", {})
