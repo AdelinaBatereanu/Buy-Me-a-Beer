@@ -31,18 +31,25 @@ def read_success(request: Request):
 
 @app.get("/donations/{donation_id}", response_model=Donation)
 def get_donation(donation_id: str, db: Session = Depends(get_db)):
-    donation = crud.get_donation_by_id(db, donation_id)
-    if not donation:
-        raise HTTPException(404, "Donation not found")
-    return donation
-
-@app.post("/donations/", response_model=Donation)
-def donate(user_input: DonationCreate, db: Session = Depends(get_db)):
-    donation = crud.create_donation(db, user_input.donor_name, user_input.email, user_input.amount, user_input.message, status="completed")
-    return donation
+    try:
+        donation = crud.get_donation_by_id(db, donation_id)
+        if not donation:
+            raise HTTPException(404, "Donation not found")
+        return donation
+    except Exception as e:
+        raise HTTPException(500, f"Internal server error: {e}")
 
 @app.get("/donations/", response_model=List[Donation])
 def list_donations(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return db.query(models.Donation).offset(skip).limit(limit).all()
+
+@app.get("/cancel", include_in_schema=False)
+def read_cancel(request: Request, donation_id: str = None, db: Session = Depends(get_db)):
+    if donation_id:
+        donation = crud.get_donation_by_id(db, donation_id)
+        if donation and donation.status == "pending":
+            donation.status = "canceled"
+            db.commit()
+    return templates.TemplateResponse("cancel.html", {"request": request})
 
 app.mount("/static", StaticFiles(directory="static"), name="static")

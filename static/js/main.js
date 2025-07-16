@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <input type="text" id="donor-name" class="form-control" placeholder="Your name (optional)">
                         </div>
                         <div class="mb-2">
-                            <textarea id="donor-message" class="form-control" placeholder="Message (optional)"></textarea>
+                            <textarea id="donor-message" class="form-control" placeholder="Message (optional)" maxlength="300"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary w-100" id="donate-button">Donate</button>
                         <div id="donate-message" style="height: 32px; margin-top:0.5em; color:#333; text-align:center; font-size:1em;"></div>
@@ -111,15 +111,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     donateButton.onclick = async function (e) {
                         e.preventDefault();
 
-                        // Gather form data
                         let donorName = document.getElementById("donor-name").value.trim();
                         const donorMessage = document.getElementById("donor-message").value;
                         const amount = btn.getAttribute("data-amount");
 
-                        // Set defaults if empty
                         if (!donorName) donorName = "anonymous";
 
-                        // Show redirecting message
                         if (donateMessage) {
                             donateMessage.textContent = "Redirecting to payment...";
                             donateMessage.style.color = "#000";
@@ -140,14 +137,23 @@ document.addEventListener("DOMContentLoaded", function () {
                             });
 
                             if (!response.ok) {
-                                throw new Error(`Error: ${response.statusText}`);
+                                const errorData = await response.json().catch(() => ({}));
+                                const errorMsg = errorData.detail || response.statusText;
+                                if (donateMessage) {
+                                    donateMessage.textContent = "Error: " + errorMsg;
+                                    donateMessage.style.color = "#000";
+                                }
+                                return;
                             }
 
                             const data = await response.json();
                             window.location.href = data.url;
                         } catch (error) {
                             console.error("Failed to create donation:", error);
-                            alert("Failed to create donation. Please try again.");
+                            if (donateMessage) {
+                                donateMessage.textContent = "Network error. Please try again.";
+                                donateMessage.style.color = "#000";
+                            }
                         }
                     };
                 }

@@ -120,3 +120,32 @@ form.donation-form .mb-2 {
 #donate-form-container {
     padding: 0 !important;
 }
+
+.plain-text-link {
+    font-family: 'Yuji Boku', serif;
+    background: none !important;
+    border: none;
+    color: #000 !important;
+    text-decoration: none;
+    font-size: 1.8em;
+    cursor: pointer;
+    padding: 0;
+}
+
+.plain-text-link:hover,
+.plain-text-link:focus {
+    text-decoration: underline;
+    color: #000 !important;
+}
+
+.plain-text-link:visited {
+    color: #000 !important;
+}
+
+#message {
+    max-width: 700px;
+    word-break: break-word;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
