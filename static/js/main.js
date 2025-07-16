@@ -8,6 +8,81 @@ document.addEventListener("DOMContentLoaded", function () {
     // Attach click handler to each donate button
     document.querySelectorAll(".donate-btn").forEach(function (btn) {
         btn.onclick = function () {
+            const isMobile = window.innerWidth <= 800;
+                        if (isMobile) {
+                // Remove any existing mobile form
+                const existingForm = document.getElementById("donate-form-mobile");
+                if (existingForm) existingForm.remove();
+
+                // Build the donation form HTML
+                const formHtml = `
+                    <div id="donate-form-mobile" style="width:100%; margin-top:1em;">
+                        <form class="donation-form">
+                            <div class="mb-2">
+                                <input type="text" id="donor-name" class="form-control" placeholder="Your name (optional)">
+                            </div>
+                            <div class="mb-2">
+                                <textarea id="donor-message" class="form-control" placeholder="Message (optional)" maxlength="300"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100" id="donate-button">Donate</button>
+                            <div id="donate-message" style="height: 32px; margin-top:0.5em; color:#333; text-align:center; font-size:1em;"></div>
+                        </form>
+                    </div>
+                `;
+
+                // Insert the form after the clicked button's wrapper
+                const selectedWrapper = Array.from(wrappers).find(w => w.contains(btn));
+                selectedWrapper.insertAdjacentHTML('afterend', formHtml);
+
+                // Add form submission handler
+                const donateButton = document.getElementById("donate-button");
+                const donateMessage = document.getElementById("donate-message");
+                if (donateButton) {
+                    donateButton.onclick = async function (e) {
+                        e.preventDefault();
+                        let donorName = document.getElementById("donor-name").value.trim();
+                        const donorMessage = document.getElementById("donor-message").value;
+                        const amount = btn.getAttribute("data-amount");
+                        if (!donorName) donorName = "anonymous";
+                        if (donateMessage) {
+                            donateMessage.textContent = "Redirecting to payment...";
+                            donateMessage.style.color = "#000";
+                            donateMessage.style.fontSize = "0.9em";
+                        }
+                        try {
+                            const response = await fetch("/payments/create-checkout-session/", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    donor_name: donorName,
+                                    message: donorMessage || null,
+                                    amount: parseFloat(amount),
+                                }),
+                            });
+                            if (!response.ok) {
+                                const errorData = await response.json().catch(() => ({}));
+                                const errorMsg = errorData.detail || response.statusText;
+                                if (donateMessage) {
+                                    donateMessage.textContent = "Error: " + errorMsg;
+                                    donateMessage.style.color = "#000";
+                                }
+                                return;
+                            }
+                            const data = await response.json();
+                            window.location.href = data.url;
+                        } catch (error) {
+                            console.error("Failed to create donation:", error);
+                            if (donateMessage) {
+                                donateMessage.textContent = "Network error. Please try again.";
+                                donateMessage.style.color = "#000";
+                            }
+                        }
+                    };
+                }
+                return;
+            }    
             // Reset all button wrappers to initial state
             wrappers.forEach((w) => {
                 w.classList.remove("fade-out", "selected", "move-left");
@@ -53,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div style="position:relative; flex: 0 0 20%; max-width: 20%;">
                         <span class="back-arrow" style="
                             position: absolute;
-                            left: -2em;
+                            left: 1em;
                             top: 50%;
                             transform: translateY(-50%);
                             cursor:pointer;
@@ -100,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 donateFormContainer.innerHTML = `
                     <div class="d-flex w-100 align-items-top">
                         ${leftHtml}
-                        <div style="flex:1; height: 278px;">
+                        <div style="flex:1;">
                             ${formHtml}
                         </div>
                     </div>

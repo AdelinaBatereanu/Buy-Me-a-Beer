@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Page title block for dynamic titles -->
     <title>{% block title %}Buy Me a Beer{% endblock %}</title>
     
@@ -17,9 +18,11 @@
     <!-- Additional head content block -->
     {% block head %}{% endblock %}
 </head>
-<body class="d-flex justify-content-center align-items-center min-vh-100 w-100 flex-column">
+<body>
     <!-- Main content block -->
-    {% block content %}{% endblock %}
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
     
     <!-- Footer include -->
     {% include "components/footer.html" %}
