@@ -1,0 +1,122 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+ font-family: 'Yuji Boku', serif;
+}
+
+h1 {
+    font-size: 3.8em !important;
+}
+form.donation-form input,
+form.donation-form textarea {
+    font-family: 'Inter', sans-serif; /* Ensure all form elements use the same font */
+    border: 1px solid black; /* Add black border */
+    padding: 0.5em; /* Add padding for better appearance */
+    border-radius: 4px; /* Slightly rounded corners */
+}
+
+form.donation-form label {
+    font-family: 'Inter', sans-serif; /* Ensure consistent font */
+    border: none; /* Remove border from labels */
+    padding: 0; /* Reset padding for labels */
+}
+
+form.donation-form input[type="checkbox"] {
+    border: 1px solid black; /* Add black border */
+    background-color: white; /* Default background color */
+    cursor: pointer; /* Change cursor to pointer */
+    transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+}
+
+form.donation-form input[type="checkbox"] {
+    accent-color: #ffc53d; /* This sets the check color when checked */
+}
+
+/* Style for checked state */
+form.donation-form input[type="checkbox"]:checked {
+    background-color: #ffc53d !important; /* Change background color when checked */
+    border-color: black; /* Keep border black */
+}
+
+form.donation-form button {
+    font-family: 'Inter', sans-serif; /* Match the global font */
+    font-size: 1em;
+    background-color: #ffc53d; /* Button background color */
+    color: #000; /* Button text color */
+    border: none; /* Add black border */
+    padding: 0.3em 1.5em; /* Add padding for better appearance */
+    border-radius: 4px; /* Slightly rounded corners */
+    transition: background-color 0.3s, color 0.3s; /* Smooth hover transition */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+form.donation-form button:hover {
+    background-color: black; /* Change background to black on hover */
+    color: white; /* Change text color to white on hover */
+}
+
+/* Ensure consistent spacing and alignment */
+form.donation-form .mb-2 {
+    margin-bottom: 1em; /* Add spacing between form elements */
+}
+
+.description-text {
+    font-size: 0.9rem !important;      /* Make text smaller */
+    max-width: 450px;     /* Limit width */
+    padding-top: 0.5em;
+    padding-bottom: 1.5em;
+    margin: 0;
+}
+
+.donate-btn {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.donate-btn:focus {
+  outline: none;
+}
+
+.beer-img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.beer-img {
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.donate-btn-wrapper {
+  transition: opacity 0.5s;
+}
+
+.donate-btn-wrapper.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.donate-btn-wrapper.selected {
+  z-index: 2;
+}
+
+.donate-btn-wrapper.selected.move-left {
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    z-index: 2;
+}
+
+#donate-buttons {
+    padding: 0 !important;
+}
+
+#donate-form-container {
+    padding: 0 !important;
+}

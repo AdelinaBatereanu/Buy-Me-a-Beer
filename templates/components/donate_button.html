@@ -1,0 +1,15 @@
+<div class="d-flex flex-column align-items-center donate-block" style="flex: 0 0 20%; max-width: 20%;">
+  <div class="donate-btn-wrapper w-100">
+    <button type="button" class="donate-btn btn btn-lg w-100 py-3" data-amount="{{ amount }}" data-label="{{ label }}">
+      <span class="beer-img-wrapper d-block">
+        <img src="{{ img_src }}" alt="Beer" class="beer-img" style="height:160px; width:auto;">
+      </span>
+      <div class="beer-amount" style="font-family: 'Yuji Boku', serif; font-size: 1.2em;">
+        {{ price_text }}
+      </div>
+      <div class="beer-label" style="font-family: 'Inter', sans-serif; font-size: 0.7em;">
+        {{ label }}
+      </div>
+    </button>
+  </div>
+</div>

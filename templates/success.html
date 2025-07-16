@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Thank You!{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-column justify-content-center align-items-center w-100">
+    <h1 id="thankyou-header" class="mb-3" style="font-size:3.8em;">Thank You!</h1>
+    <div id="donation-details" class="text-center" style="font-size:1.1em;">
+      <div id="amount"></div>
+      <div id="message" class="mt-2"></div>
+    </div>
+    <div style="height: auto;"></div>
+    <div id="success-image" style="min-height: 230px;">
+      <img id="cheers-img" src="/static/img/beer1.png" alt="Beer" style="height:230px;">
+    </div>
+  </div>
+  <script>
+    async function loadDonation() {
+      const params = new URLSearchParams(window.location.search);
+      const donationId = params.get("donation_id");
+      document.getElementById("thankyou-header").textContent = "Loading…";
+      document.getElementById("amount").textContent = "";
+      document.getElementById("message").textContent = "";
+      document.getElementById("cheers-img").src = "";
+
+      // Map amounts to image filenames
+      const amountToImg = {
+        0.5: "/static/img/cheers1.png",
+        1: "/static/img/cheers2.png",
+        2.5: "/static/img/cheers3.png",
+        3.5: "/static/img/cheers4.png",
+        5: "/static/img/cheers.png"
+      };
+
+      try {
+        const resp = await fetch(`/donations/${donationId}`);
+        const donation = await resp.json();
+
+        // Set thank you header
+        if (!donation.donor_name || donation.donor_name.toLowerCase() === "anonymous") {
+          document.getElementById("thankyou-header").textContent = "Thank you!";
+        } else {
+          document.getElementById("thankyou-header").textContent = `Thank you, ${donation.donor_name}!`;
+        }
+
+        // Set amount
+        document.getElementById("amount").textContent = `Your donation of €${donation.amount.toFixed(2)} is highly appreciated! Cheers!`;
+
+        // Set message if present
+        if (donation.message && donation.message.trim() !== "") {
+          document.getElementById("message").textContent = `Your message: ${donation.message}`;
+        }
+        // Set image based on amount
+                const imgSrc = amountToImg[donation.amount];
+                if (imgSrc) {
+                  document.getElementById("cheers-img").src = imgSrc;
+                } else {
+                  document.getElementById("cheers-img").src = "/static/img/beer1.png"; // fallback
+                }
+              } catch (e) {
+                document.getElementById("thankyou-header").textContent = "Thank you!";
+                document.getElementById("amount").textContent = "";
+                document.getElementById("message").textContent = "Could not load donation details.";
+                document.getElementById("cheers-img").src = "/static/img/beer1.png";
+              }
+            }
+    window.onload = loadDonation;
+  </script>
+{% endblock %}

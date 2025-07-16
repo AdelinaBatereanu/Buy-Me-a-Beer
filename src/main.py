@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
+from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
@@ -18,26 +19,24 @@ app = FastAPI(debug=settings.debug)
 
 app.include_router(payments_router)
 
+templates = Jinja2Templates(directory="templates")
+
 @app.get("/", include_in_schema=False)
-def root():
-    return FileResponse("static/index.html")
+def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/success", include_in_schema=False)
-def read_success():
-    return FileResponse("static/success.html")
+def read_success(request: Request):
+    return templates.TemplateResponse("success.html", {"request": request})
 
-@app.get("/health")
-def read_root():
-    return {"status": "ok", "service": "BuyMeACoffee"}
-
-@app.get("/donate/{donation_id}", response_model=Donation)
+@app.get("/donations/{donation_id}", response_model=Donation)
 def get_donation(donation_id: str, db: Session = Depends(get_db)):
     donation = crud.get_donation_by_id(db, donation_id)
     if not donation:
         raise HTTPException(404, "Donation not found")
     return donation
 
-@app.post("/donate/", response_model=Donation)
+@app.post("/donations/", response_model=Donation)
 def donate(user_input: DonationCreate, db: Session = Depends(get_db)):
     donation = crud.create_donation(db, user_input.donor_name, user_input.email, user_input.amount, user_input.message, status="completed")
     return donation

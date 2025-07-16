@@ -7,15 +7,11 @@ import os
 from src.config import settings
 from src.schemas import DonationCreate
 from src.db import get_db
-from src.crud import create_donation, create_pending_donation, complete_donation
+from src.crud import create_pending_donation, complete_donation
 
-router = APIRouter(prefix="", tags=["payments"])
+router = APIRouter(prefix="/payments", tags=["payments"])
 
 stripe.api_key = settings.stripe_secret_key
-
-@router.get("/health-check")
-def payments_health():
-    return {"status": "payments router up"}
 
 @router.post("/create-checkout-session/")
 def create_checkout_session(
@@ -23,7 +19,7 @@ def create_checkout_session(
     db: Session = Depends(get_db)
 ):
     try:
-        pending = create_pending_donation(db, d.donor_name, d.email, d.amount, d.message)
+        pending = create_pending_donation(db, d.donor_name, d.amount, d.message)
         # 1) Create a Stripe Checkout Session
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
@@ -37,10 +33,9 @@ def create_checkout_session(
             }],
             mode="payment",
             success_url=f"http://localhost:8000/success?donation_id={pending.id}&session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url="http://localhost:8000/index",
+            cancel_url="http://localhost:8000/",
             metadata={
-                "donor_name": d.donor_name or "",
-                "email":      d.email or "",
+                "donor_name": d.donor_name,
                 "message":    d.message or "",
                 "donation_id": str(pending.id)
             }
