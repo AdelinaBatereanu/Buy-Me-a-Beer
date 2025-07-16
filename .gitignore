@@ -1,38 +1,36 @@
-# Progress tracking files
-JOURNAL.md
+# --- Documentation and Progress Tracking Files ---
+JOURNAL.md 
 ROADMAP.md
 
-# Env vars
-.env
+# --- Environment Variables ---
+.env 
 
-# database
+# --- Database Files ---
 db.sqlite3
 
-# Virtual environment
-.venv
+# --- Virtual Environment Directories ---
+.venv/
 venv/
 env/
 
-# cache
-/pycache/
-__pycache__/
+# --- Python Cache and Bytecode ---
+__pycache__/ 
 **/__pycache__/
-
-# Python bytecode
+/pycache/
 *.pyc
 *.pyo
 *.pyd
 
-# Editor/IDE settings
+# --- Editor and IDE Settings ---
 .vscode/
 .idea/
 *.swp
 
-# OS files
+# --- OS Generated Files ---
 .DS_Store
 Thumbs.db
 
-# Test and coverage outputs
+# --- Test and Coverage Outputs ---
 htmlcov/
 .coverage
 .tox/

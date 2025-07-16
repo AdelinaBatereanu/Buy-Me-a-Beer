@@ -9,70 +9,87 @@
       <div id="amount"></div>
     </div>
     <div style="height: auto;"></div>
-    <div id="success-image" style="min-height: 230px;">
+    <div id="success-image">
       <img id="cheers-img" alt="Beer" style="height:230px;">
     </div>
     <div id="message" class="mt-3"></div>
-    </div>
-      <div class="mt-2">
+    <!-- Return to Home link -->
+    <div class="mt-2">
       <a href="/" class="plain-text-link">Return to Home</a>
     </div>
+  </div>
   <script>
+    // Map donation amounts to corresponding image filenames
+    const amountToImg = {
+      0.5: "/static/img/cheers1.png",
+      1: "/static/img/cheers2.png",
+      2.5: "/static/img/cheers3.png",
+      3.5: "/static/img/cheers4.png",
+      5: "/static/img/cheers5.png"
+    };
+
+    // Load and display donation details based on donation_id from URL
     async function loadDonation() {
       const params = new URLSearchParams(window.location.search);
       const donationId = params.get("donation_id");
+
+      // Reset UI to loading state
       document.getElementById("thankyou-header").textContent = "Loading…";
       document.getElementById("amount").textContent = "";
       document.getElementById("message").textContent = "";
       document.getElementById("cheers-img").src = "";
 
-      // Map amounts to image filenames
-      const amountToImg = {
-        0.5: "/static/img/cheers1.png",
-        1: "/static/img/cheers2.png",
-        2.5: "/static/img/cheers3.png",
-        3.5: "/static/img/cheers4.png",
-        5: "/static/img/cheers5.png"
-      };
-
       try {
+        // Fetch donation details from backend
         const resp = await fetch(`/donations/${donationId}`);
         if (!resp.ok) throw new Error("Donation not found");
         const donation = await resp.json();
 
+        // Handle completed donation
         if (donation.status === "completed") {
-          // Show thank you
+          // Show personalized thank you if donor is not anonymous
           document.getElementById("thankyou-header").textContent =
             (!donation.donor_name || donation.donor_name.toLowerCase() === "anonymous")
               ? "Thank you!"
               : `Thank you, ${donation.donor_name}!`;
+
+          // Show donation amount
           document.getElementById("amount").textContent =
             `Your donation of €${donation.amount.toFixed(2)} is highly appreciated! Cheers!`;
+
+          // Show donor message if present
           if (donation.message && donation.message.trim() !== "") {
             document.getElementById("message").textContent = `Your message: ${donation.message}`;
           }
+
+          // Select image based on amount, fallback to default
           const imgSrc = amountToImg[donation.amount];
           document.getElementById("cheers-img").src = imgSrc || "/static/img/beer1.png";
-        } else if (donation.status === "pending") {
-          // Payment not completed yet
+        }
+        // Handle pending donation
+        else if (donation.status === "pending") {
           document.getElementById("thankyou-header").textContent = "Payment Processing…";
           document.getElementById("amount").textContent = "Your payment is being processed. Please wait a moment and refresh this page.";
           document.getElementById("message").textContent = "";
-          document.getElementById("cheers-img").src = "/static/img/pouring.png";
-        } else {
-          // Unknown status
+          document.getElementById("cheers-img").src = "/static/img/pouring.png?v=2";
+        }
+        // Handle unknown status
+        else {
           document.getElementById("thankyou-header").textContent = "Something went wrong";
           document.getElementById("amount").textContent = "";
           document.getElementById("message").textContent = "";
           document.getElementById("cheers-img").src = "/static/img/spilled.png";
         }
       } catch (e) {
+        // Handle fetch or parsing errors
         document.getElementById("thankyou-header").textContent = "Something went wrong";
         document.getElementById("amount").textContent = "Could not load donation details.";
         document.getElementById("message").textContent = "";
         document.getElementById("cheers-img").src = "/static/img/spilled.png";
       }
     }
+
+    // Run loadDonation when the page loads
     window.onload = loadDonation;
   </script>
 {% endblock %}

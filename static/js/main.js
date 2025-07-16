@@ -1,11 +1,14 @@
+// Wait for the DOM to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
+    // Get main containers and button wrappers
     const donateButtons = document.getElementById("donate-buttons");
     const donateFormContainer = document.getElementById("donate-form-container");
     const wrappers = donateButtons.querySelectorAll(".donate-btn-wrapper");
 
+    // Attach click handler to each donate button
     document.querySelectorAll(".donate-btn").forEach(function (btn) {
         btn.onclick = function () {
-            // Reset all buttons before applying new styles
+            // Reset all button wrappers to initial state
             wrappers.forEach((w) => {
                 w.classList.remove("fade-out", "selected", "move-left");
                 w.style.display = "";
@@ -13,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 w.style.transform = "";
             });
 
-            // Fade out all except clicked
+            // Fade out all wrappers except the clicked one, mark clicked as selected
             wrappers.forEach((w) => {
                 if (w.contains(btn)) {
                     w.classList.add("selected");
@@ -24,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-            // Move selected button to the left
+            // Move the selected button to the left
             const selectedWrapper = Array.from(wrappers).find(w => w.contains(btn));
             const containerRect = donateButtons.getBoundingClientRect();
             const wrapperRect = selectedWrapper.getBoundingClientRect();
@@ -33,16 +36,16 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedWrapper.style.transform = `translateX(-${moveX}px)`;
             selectedWrapper.classList.add("move-left");
 
-            // After fade out, show form
+            // After fade out animation, show the donation form
             setTimeout(() => {
-                // Hide all except selected
+                // Hide all wrappers except the selected one
                 wrappers.forEach((w) => {
                     if (!w.contains(btn)) w.style.display = "none";
                 });
 
                 donateButtons.classList.add("hidden");
 
-                // Build leftHtml
+                // Build the left side (selected button with back arrow)
                 const imgSrc = btn.querySelector(".beer-img").getAttribute("src");
                 const priceText = btn.querySelector(".beer-amount").textContent;
                 const labelText = btn.querySelector(".beer-label").textContent;
@@ -78,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 `;
 
-                // Build formHtml
+                // Build the donation form HTML
                 const formHtml = `
                     <form class="donation-form">
                         <div style="height: 40px;"></div>
@@ -93,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </form>
                 `;
 
-                // Insert form and left image
+                // Insert the left side and form into the container
                 donateFormContainer.innerHTML = `
                     <div class="d-flex w-100 align-items-top">
                         ${leftHtml}
@@ -104,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
                 donateFormContainer.style.display = "block";
 
-                // Add donate button handler
+                // Handle donation form submission
                 const donateButton = document.getElementById("donate-button");
                 const donateMessage = document.getElementById("donate-message");
                 if (donateButton) {
@@ -124,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
 
                         try {
+                            // Send donation data to backend
                             const response = await fetch("/payments/create-checkout-session/", {
                                 method: "POST",
                                 headers: {
@@ -137,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             });
 
                             if (!response.ok) {
+                                // Show error message if request fails
                                 const errorData = await response.json().catch(() => ({}));
                                 const errorMsg = errorData.detail || response.statusText;
                                 if (donateMessage) {
@@ -146,9 +151,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                 return;
                             }
 
+                            // Redirect to payment page
                             const data = await response.json();
                             window.location.href = data.url;
                         } catch (error) {
+                            // Show network error
                             console.error("Failed to create donation:", error);
                             if (donateMessage) {
                                 donateMessage.textContent = "Network error. Please try again.";
@@ -158,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     };
                 }
 
-                // Back arrow logic
+                // Handle back arrow click to return to button selection
                 const backArrow = donateFormContainer.querySelector('.back-arrow');
                 if (backArrow) {
                     backArrow.onclick = function () {
@@ -189,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 });
                             }, 500);
                         } else {
-                            // Fallback if no selected wrapper found
+                            // Fallback: just reset everything
                             donateFormContainer.style.display = "none";
                             donateButtons.classList.remove("hidden");
                             wrappers.forEach((w) => {
@@ -200,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     };
                 }
-            }, 500); // fade out duration
+            }, 500); // Wait for fade out animation to finish
         };
     });
 });

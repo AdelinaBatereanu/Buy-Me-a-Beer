@@ -3,16 +3,22 @@
 {% block title %}Donation Canceled{% endblock %}
 
 {% block content %}
-  <div class="d-flex flex-column justify-content-center align-items-center w-100">
-    <h1 class="mb-3" style="font-size:3em;">Donation canceled</h1>
-    <div id="cancel-details" class="text-center" style="font-size:1.1em;">
-      <div>No payment was made. Want to reconsider?</div>
-        <div>
-            <img src="static/img/wheat.png" style="height:180px;">
-        </div>
-        <div class="mt-1">
-          <a href="/" class="plain-text-link">Return to Home</a>
+    <!-- Centered container for the cancellation message -->
+    <div class="d-flex flex-column justify-content-center align-items-center w-100">
+        <!-- Main heading -->
+        <h1 class="mb-3" style="font-size:3em;">Donation canceled</h1>
+        <!-- Details section -->
+        <div id="cancel-details" class="text-center" style="font-size:1.1em;">
+            <!-- Informational message -->
+            <div>No payment was made. Want to reconsider?</div>
+            <!-- Thematic image -->
+            <div>
+                <img src="static/img/wheat.png" alt="Wheat" style="height:180px;">
+            </div>
+            <!-- Link to return home -->
+            <div class="mt-1">
+                <a href="/" class="plain-text-link">Return to Home</a>
+            </div>
         </div>
     </div>
-  </div>
 {% endblock %}

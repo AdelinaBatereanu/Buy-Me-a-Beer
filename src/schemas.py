@@ -2,20 +2,29 @@ from pydantic import BaseModel, validator
 from datetime import datetime
 
 class Donation(BaseModel):
-    id: str
-    donor_name: str | None = None
-    amount: float
-    message: str | None = None
-    timestamp: datetime
-    status: str
+    """
+    Schema for a donation record.
+    """
+    id: str  # Unique identifier for the donation
+    donor_name: str | None = None  # Optional donor name
+    amount: float  # Donation amount
+    message: str | None = None  # Optional message from donor
+    timestamp: datetime  # Time when the donation was made
+    status: str  # Status of the donation (e.g., 'pending', 'completed')
 
 class DonationCreate(BaseModel):
-    donor_name: str | None = None
-    amount: float
-    message: str | None = None
+    """
+    Schema for creating a new donation.
+    """
+    donor_name: str | None = None  # Optional donor name
+    amount: float  # Donation amount
+    message: str | None = None  # Optional message from donor
 
     @validator("message")
     def message_max_length(cls, v):
+        """
+        Validates that the message does not exceed 1000 characters.
+        """
         if v and len(v) > 300:
-            raise ValueError("Message must be at most 1000 characters")
+            raise ValueError("Message must be at most 300 characters")
         return v

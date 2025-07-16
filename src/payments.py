@@ -22,7 +22,7 @@ def create_checkout_session(
         pending = create_pending_donation(db, d.donor_name, d.amount, d.message)
         # 1) Create a Stripe Checkout Session
         session = stripe.checkout.Session.create(
-            payment_method_types=["card"],
+            payment_method_types=["card", "paypal", "revolut_pay"],
             line_items=[{
                 "price_data": {
                     "currency": "eur",

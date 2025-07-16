@@ -2,19 +2,28 @@ from pydantic_settings import BaseSettings
 from pydantic import AnyUrl, ConfigDict
 
 class Settings(BaseSettings):
-    # your database URL
+    """
+    Application configuration settings loaded from environment variables.
+    """
+    # Database connection URL
     database_url: AnyUrl
-    # debug flag for logging or FastAPI debug mode
-    debug: bool = False
-    # Stripe credentials
-    stripe_secret_key:      str
-    stripe_publishable_key: str
-    stripe_webhook_secret:  str
 
+    # Enable or disable debug mode
+    debug: bool = False
+
+    # Stripe API credentials
+    stripe_secret_key: str
+    stripe_publishable_key: str
+    stripe_webhook_secret: str
+
+    # Admin API key for privileged operations
+    admin_api_key: str
+
+    # Pydantic model configuration for environment file support
     model_config = ConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8"
+        env_file=".env",            # Load variables from .env file
+        env_file_encoding="utf-8"   # Use UTF-8 encoding for .env file
     )
 
-
+# Instantiate settings; values are loaded from environment or .env file
 settings = Settings()

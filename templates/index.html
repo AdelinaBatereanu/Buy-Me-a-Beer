@@ -3,18 +3,26 @@
 {% block title %}Buy Me a Beer{% endblock %}
 
 {% block content %}
+  <!-- Main container centered both vertically and horizontally -->
   <div class="d-flex flex-column justify-content-center align-items-center w-100">
     <h1 class="mb-3">Buy Me a Beer</h1>
-    <p class="description-text text-center">Support my work by buying me a beer! Your donation helps me keep going. (Filler text)</p>
+    <!-- Description text -->
+    <p class="description-text text-center">
+      Support my work by buying me a beer! Your donation helps me keep going. (Filler text)
+    </p>
+    <!-- Donation options row -->
     <div class="row justify-content-center w-100" id="donate-row" style="max-width: 1000px; position: relative;">
+      <!-- Beer donation buttons -->
       <div id="donate-buttons" class="d-flex w-100 justify-content-center align-items-top" style="height: 278px;">
-        {% for beer in [
-          {'amount': 0.5, 'label': 'Share a Sip', 'img_src': '/static/img/beer1.png', 'price_text': '0.50 €'},
-          {'amount': 1, 'label': 'Buy a Can', 'img_src': '/static/img/beer2.png', 'price_text': '1.00 €'},
-          {'amount': 2.5, 'label': 'Buy a Bottle', 'img_src': '/static/img/beer3.png', 'price_text': '2.50 €'},
-          {'amount': 3.5, 'label': 'Buy a Glass', 'img_src': '/static/img/beer4.png', 'price_text': '3.50 €'},
-          {'amount': 5, 'label': 'Buy a Pint', 'img_src': '/static/img/beer5.png', 'price_text': '5.00 €'}
+        {% set beers = [
+          {'amount': 0.5, 'label': 'Share a Sip', 'img_src': '/static/img/beer1.png?v=2', 'price_text': '0.50 €'},
+          {'amount': 1, 'label': 'Buy a Can', 'img_src': '/static/img/beer2.png?v=2', 'price_text': '1.00 €'},
+          {'amount': 2.5, 'label': 'Buy a Bottle', 'img_src': '/static/img/beer3.png?v=2', 'price_text': '2.50 €'},
+          {'amount': 3.5, 'label': 'Buy a Glass', 'img_src': '/static/img/beer4.png?v=2', 'price_text': '3.50 €'},
+          {'amount': 5, 'label': 'Buy a Pint', 'img_src': '/static/img/beer5.png?v=2', 'price_text': '5.00 €'}
         ] %}
+        {% for beer in beers %}
+          {# Set variables for the donate_button component #}
           {% set amount = beer.amount %}
           {% set price_text = beer.price_text %}
           {% set label = beer.label %}
@@ -22,12 +30,15 @@
           {% include "components/donate_button.html" %}
         {% endfor %}
       </div>
+      <!-- Container for the donation form, hidden by default -->
       <div id="donate-form-container" class="w-100" style="display:none;"></div>
     </div>
+    <!-- Status message area -->
     <div id="status" class="mt-3"></div>
   </div>
 {% endblock %}
 
 {% block head %}
-<script src="/static/js/main.js"></script>
+  <!-- Main JavaScript file -->
+  <script src="/static/js/main.js"></script>
 {% endblock %}
