@@ -7,6 +7,7 @@ from src.config import settings
 from src.schemas import DonationCreate
 from src.db import get_db
 from src.crud import create_pending_donation, complete_donation
+from src.utils import send_merchant_notification
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 
@@ -83,8 +84,24 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         # 4) Create the donation with status completed
         try:
             logging.info(f"Completing donation {donation_id}")
-            complete_donation(db, donation_id)
-            logging.info(f"Donation {donation_id} marked as completed")
+            completed_donation = complete_donation(db, donation_id)
+            
+            # Send email notification to donation merchant
+            if completed_donation:
+                logging.info(f"Donation {donation_id} marked as completed")
+                try:
+                    await send_merchant_notification(
+                        donor_name=completed_donation.donor_name,
+                        amount=completed_donation.amount,
+                        message=completed_donation.message
+                    )
+                    logging.info(f"Email notification sent for donation {donation_id}")
+                except Exception as email_error:
+                    logging.error(f"Failed to send email notification: {email_error}")
+                    # Don't fail the webhook if email fails
+            else:
+                logging.warning(f"Donation {donation_id} not found or already completed") 
+                           
         except Exception as e:
             print("Error completing donation:", e)
             logging.error(f"Error completing donation: {e}")

@@ -21,7 +21,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s %(message)s",
     handlers=[logging.StreamHandler()]
 )
-logger = logging.getLogger("buy-me-coffee")
+logger = logging.getLogger("buy-me-a-beer")
 
 # Initialize FastAPI app with debug setting
 app = FastAPI(debug=settings.debug)

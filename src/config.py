@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from pydantic import AnyUrl, ConfigDict
+from pydantic import AnyUrl, ConfigDict, EmailStr
 
 class Settings(BaseSettings):
     """
@@ -18,6 +18,13 @@ class Settings(BaseSettings):
 
     # Admin API key for privileged operations
     admin_api_key: str
+
+    # SMTP settings for sending emails
+    smtp_host:     str
+    smtp_port:     int
+    smtp_user:     str
+    smtp_pass:     str
+    notify_email:  EmailStr
 
     # Pydantic model configuration for environment file support
     model_config = ConfigDict(
