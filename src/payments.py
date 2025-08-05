@@ -33,8 +33,8 @@ def create_checkout_session(
                 "quantity": 1,
             }],
             mode="payment",
-            success_url=f"http://localhost:8000/success?donation_id={pending.id}&session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"http://localhost:8000/cancel?donation_id={pending.id}",
+            success_url=f"{settings.base_url}/success?donation_id={pending.id}&session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{settings.base_url}/cancel?donation_id={pending.id}",
             metadata={
                 "donor_name": d.donor_name,
                 "message":    d.message or "",
@@ -101,7 +101,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
                     # Don't fail the webhook if email fails
             else:
                 logging.warning(f"Donation {donation_id} not found or already completed") 
-                           
+
         except Exception as e:
             print("Error completing donation:", e)
             logging.error(f"Error completing donation: {e}")

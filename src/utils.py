@@ -9,7 +9,7 @@ async def send_merchant_notification(donor_name: str|None, amount: float, messag
     msg["Subject"] = f"New Donation: €{amount:.2f}"
 
     body = (
-        f"🎉 You’ve received a new donation!\n\n"
+        f"🎉 Your work is being rewarded! Someone was bold enough to buy you a beer!\n\n"
         f"Amount: €{amount:.2f}\n"
         f"Donor:   {donor_name or 'Anonymous'}\n"
         f"Message: {message or '<no message>'}\n"

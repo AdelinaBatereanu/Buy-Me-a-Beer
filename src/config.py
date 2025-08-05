@@ -6,7 +6,10 @@ class Settings(BaseSettings):
     Application configuration settings loaded from environment variables.
     """
     # Database connection URL
-    database_url: AnyUrl
+    database_url: AnyUrl = "sqlite:///./donations.db"
+
+    # Base URL for the application
+    base_url: str = "http://localhost:8000"
 
     # Enable or disable debug mode
     debug: bool = False
