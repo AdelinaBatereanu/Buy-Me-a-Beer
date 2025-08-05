@@ -35,3 +35,6 @@ htmlcov/
 .coverage
 .tox/
 .pytest_cache/
+
+# --- WireGuard Configuration ---
+mac.conf

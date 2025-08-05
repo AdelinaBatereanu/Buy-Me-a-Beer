@@ -8,7 +8,6 @@ from src.config import settings
 # Create the SQLAlchemy engine using the database URL from settings
 engine = create_engine(
     str(settings.database_url),
-    connect_args={"check_same_thread": False},  # Needed for SQLite
     echo=settings.debug  # Enable SQL query logging if debug is True
 )
 
