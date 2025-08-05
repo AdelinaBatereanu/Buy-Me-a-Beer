@@ -1,12 +1,15 @@
 from fastapi import FastAPI, Depends, HTTPException, Request, Header
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime, timedelta
+import logging
 
 from sqlalchemy.orm import Session
 from typing import List
 
 from src import models
-from src.db import get_db
+from src.db import get_db, SessionLocal
 from src.schemas import Donation
 from src import crud
 from src.config import settings
@@ -80,3 +83,21 @@ def read_cancel(request: Request, donation_id: str = None, db: Session = Depends
             donation.status = "canceled"
             db.commit()
     return templates.TemplateResponse(request, "cancel.html", {})
+
+def clean_old_donations():
+    db = SessionLocal()
+    try:
+        threshold = datetime.now() - timedelta(minutes=1440)
+        deleted = db.query(models.Donation).filter(
+            (models.Donation.status == "pending") | (models.Donation.status == "canceled"),
+            models.Donation.timestamp < threshold
+        ).delete(synchronize_session=False)
+        db.commit()
+        logging.info(f"Deleted old donations: {deleted}")
+    finally:
+        db.close()
+
+if __name__ == "__main__" or settings.debug:
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(clean_old_donations, "interval", minutes=10)
+    scheduler.start()
