@@ -1,0 +1,170 @@
+/* =========================
+    Mobile Breakpoint (≤800px)
+    ========================= */
+@media (max-width: 800px) {
+    /* Main content switches to block layout for mobile */
+    .main-content {
+        display: block !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
+        min-height: 0 !important;
+        height: auto !important;
+    }
+    /* Adjust body padding and layout for mobile */
+    body {
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+        padding-top: 3em !important;
+        padding-bottom: 2vw;
+        min-height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    /* Utility flex classes for centering on mobile */
+    .d-flex.flex-column.justify-content-center.align-items-center.w-100,
+    .d-flex.flex-column.align-items-center.justify-content-center.w-100 {
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+        flex-direction: column !important;
+        display: flex !important;
+    }
+    /* Center headings and adjust font size */
+    h1, .mb-3 {
+        text-align: center !important;
+        width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        font-size: 3em !important;
+    }
+    /* Stack buttons vertically and center them */
+    #buttons-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    /* Stack donate row content vertically */
+    #donate-row {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+    }
+    /* Set button and wrapper width for mobile */
+    #donate-button,
+    .donate-btn-wrapper {
+        width: 200px !important;
+        max-width: 90vw !important;
+        margin: 0 0 0.5em 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    /* Remove transform and transition for selected buttons on mobile */
+    .donate-btn-wrapper.selected,
+    .donate-btn-wrapper.selected.move-left {
+        transform: none !important;
+        transition: none !important;
+    }
+    /* Adjust donate button size and layout */
+    .donate-btn {
+        width: 200px !important;
+        min-width: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-top: 1em !important;
+        padding-bottom: 1em !important;
+        font-size: 1.2em !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    /* Center beer image wrapper */
+    .beer-img-wrapper {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+    /* Adjust beer image size for mobile */
+    .beer-img {
+        height: 200px !important;
+        max-width: 90vw !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+    /* Adjust beer amount and label font sizes */
+    .beer-amount {
+        font-size: 1.8em !important;
+    }
+    .beer-label {
+        font-size: 1em !important;
+    }
+    /* Success image responsive sizing */
+    #success-image img {
+        max-width: 95vw !important;
+        height: auto !important;
+        display: block !important;
+        margin: 0 auto !important;
+    }
+    /* Donation form container layout for mobile */
+    #donate-form-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+    /* Center and shrink description text */
+    .description-text {
+        text-align: center !important;
+        width: 90vw !important;
+        font-size: 0.8em !important;
+        padding-bottom: 0;
+    }
+    /* Donation form width and layout for mobile */
+    #donate-form-mobile,
+    form.donation-form {
+        width: 85vw !important;
+        max-width: 85vw !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    /* Make all form children full width */
+    form.donation-form > * {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    /* Ensure donate button and wrappers are full width */
+    #donate-button,
+    .donate-btn-wrapper,
+    .donate-btn {
+        width: 85vw !important;
+        max-width: 85vw !important;
+    }
+    /* Add padding to footer */
+    .footer {
+        padding-bottom: 1.5em !important;
+    }
+    /* Hide form container on mobile */
+    #donate-form-container {
+        display: none !important;
+    }
+}

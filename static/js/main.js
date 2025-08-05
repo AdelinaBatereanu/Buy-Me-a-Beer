@@ -1,7 +1,7 @@
 // Wait for the DOM to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
     // Get main containers and button wrappers
-    const donateButtons = document.getElementById("donate-buttons");
+    const donateButtons = document.getElementById("buttons-container");
     const donateFormContainer = document.getElementById("donate-form-container");
     const wrappers = donateButtons.querySelectorAll(".donate-btn-wrapper");
 

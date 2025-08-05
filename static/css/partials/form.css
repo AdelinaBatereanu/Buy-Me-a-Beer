@@ -1,0 +1,61 @@
+/* =========================
+    Donation Form Styles
+    ========================= */
+
+/* Style inputs and textareas for consistency */
+form.donation-form input,
+form.donation-form textarea {
+    font-family: 'Inter', sans-serif;
+    border: 1px solid black;
+    padding: 0.5em;
+    border-radius: 4px;
+}
+
+/* Style labels for clarity */
+form.donation-form label {
+    font-family: 'Inter', sans-serif;
+    border: none;
+    padding: 0;
+}
+
+/* Ensure donate row has enough height for content */
+#donate-row {
+    min-height: 278px;
+}
+
+/* Submit button styling */
+form.donation-form button {
+    font-family: 'Inter', sans-serif;
+    font-size: 1em;
+    background-color: #ffc53d;
+    color: #000;
+    border: none;
+    padding: 0.3em 1.5em;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+/* Button hover effect */
+form.donation-form button:hover {
+    background-color: black;
+    color: white;
+}
+
+/* Spacing between form elements */
+form.donation-form .mb-2 {
+    margin-bottom: 1em;
+}
+
+/* =========================
+    Message Container
+    ========================= */
+
+/* Center and constrain message container */
+#message {
+    max-width: 700px;
+    word-break: break-word;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}

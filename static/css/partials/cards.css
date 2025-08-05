@@ -1,0 +1,32 @@
+/* =========================
+    Donate Card Styles
+    ========================= */
+
+/* Remove default button styles for donate buttons */
+.donate-btn {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Remove focus outline for donate buttons */
+.donate-btn:focus {
+    outline: none;
+}
+
+/* =========================
+    Beer Image Styles
+    ========================= */
+
+/* Center beer image wrapper */
+.beer-img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Beer image hover effect */
+.beer-img {
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
