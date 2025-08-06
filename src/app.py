@@ -1,15 +1,13 @@
 from fastapi import FastAPI, Depends, HTTPException, Request, Header
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import datetime, timedelta
 import logging
 
 from sqlalchemy.orm import Session
 from typing import List
 
 from src import models
-from src.db import get_db, SessionLocal
+from src.db import get_db
 from src.schemas import Donation
 from src import crud
 from src.config import settings
@@ -112,24 +110,6 @@ def read_cancel(request: Request, donation_id: str = None, db: Session = Depends
             logger.info(f"No pending donation to cancel for id={donation_id}")
     return templates.TemplateResponse(request, "cancel.html", {})
 
-def clean_old_donations():
-    logger.info("Running background cleanup for old donations")
-    db = SessionLocal()
-    try:
-        threshold = datetime.now() - timedelta(minutes=120)
-        deleted = db.query(models.Donation).filter(
-            (models.Donation.status == "pending") | (models.Donation.status == "canceled"),
-            models.Donation.timestamp < threshold
-        ).delete(synchronize_session=False)
-        db.commit()
-        logger.info(f"Deleted old donations: {deleted}")
-    except Exception as e:
-        logger.error(f"Error cleaning old donations: {e}")
-    finally:
-        db.close()
-
-if __name__ == "__main__" or settings.debug:
-    logger.info("Starting background scheduler for donation cleanup")
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(clean_old_donations, "interval", minutes=1440)
-    scheduler.start()
+# Note: Background tasks are removed for Vercel serverless deployment
+# Vercel doesn't support long-running background processes
+# You can use external services or cron jobs for cleanup tasks if needed
