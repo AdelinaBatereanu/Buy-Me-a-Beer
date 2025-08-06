@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}About Me{% endblock %}
+
+{% block content %}
+    <!-- Centered container for the about me content -->
+    <div class="d-flex flex-column justify-content-center align-items-center w-100">
+        <!-- Main heading -->
+        <h1 class="mb-3">About Me</h1>
+        <!-- About me content -->
+        <div class="description-text text-center">
+            <p>Hey! Thanks for checking out this page!</p>
+
+            <p>My name is Adelina and I am starting my career in programming.
+               My journey up to this point was very diverse. I tried mechanical engineering, architecture and even
+               design until I found my real passion. Now I am 26 and this fall I am starting to study computer science 
+               (third time’s the charm!) I currently work two jobs in order to support myself, so I created this
+               donation page hoping that someone might find my story interesting and help me along the way.</p>
+
+        </div>
+        <!-- Link to return home -->
+        <div class="mt-2">
+            <a href="/" class="plain-text-link">Back to Home</a>
+        </div>
+    </div>
+{% endblock %}

@@ -6,7 +6,7 @@ async def send_merchant_notification(donor_name: str|None, amount: float, messag
     msg = EmailMessage()
     msg["From"]    = settings.smtp_user
     msg["To"]      = settings.notify_email
-    msg["Subject"] = f"New Donation: €{amount:.2f}"
+    msg["Subject"] = f"Buy Me a Beer - New Donation"
 
     body = (
         f"🎉 Your work is being rewarded! Someone was bold enough to buy you a beer!\n\n"

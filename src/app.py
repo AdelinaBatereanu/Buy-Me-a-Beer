@@ -43,6 +43,14 @@ def root(request: Request):
     logger.info("Rendering home page")
     return templates.TemplateResponse(request, "index.html", {})
 
+@app.get("/about", include_in_schema=False)
+def read_about(request: Request):
+    """
+    Render the about me page.
+    """
+    logger.info("Rendering about me page")
+    return templates.TemplateResponse(request, "about.html", {})
+
 @app.get("/success", include_in_schema=False)
 def read_success(request: Request):
     """
