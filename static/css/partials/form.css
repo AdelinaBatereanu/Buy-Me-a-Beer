@@ -1,8 +1,6 @@
-/* =========================
-    Donation Form Styles
-    ========================= */
+/* ===Donation Form Styles=== */
 
-/* Style inputs and textareas for consistency */
+/* Style inputs and textareas */
 form.donation-form input,
 form.donation-form textarea {
     font-family: 'Inter', sans-serif;
@@ -11,7 +9,7 @@ form.donation-form textarea {
     border-radius: 4px;
 }
 
-/* Style labels for clarity */
+/* Style labels */
 form.donation-form label {
     font-family: 'Inter', sans-serif;
     border: none;
@@ -47,9 +45,7 @@ form.donation-form .mb-2 {
     margin-bottom: 1em;
 }
 
-/* =========================
-    Message Container
-    ========================= */
+/* ===Message Container=== */
 
 /* Center and constrain message container */
 #message {

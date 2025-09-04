@@ -1,15 +1,11 @@
-/* =========================
-    Utility Classes
-    ========================= */
+/* ===Utility Classes=== */
 
 /* Hide element */
 .hidden {
     display: none !important;
 }
 
-/* =========================
-    Donate Button Wrapper
-    ========================= */
+/* ===Donate Button Wrapper=== */
 
 /* Fade transition for donate button wrapper */
 .donate-btn-wrapper {

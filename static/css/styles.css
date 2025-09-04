@@ -3,9 +3,7 @@
 @import url('partials/form.css');
 @import url('partials/utilities.css');
 
-/* =========================
-    Global Typography & Layout
-    ========================= */
+/* ===Global Typography & Layout=== */
 
 /* Set base font and layout for body */
 body {
@@ -39,7 +37,7 @@ html, body {
     width: 100%;
 }
 
-/* Headings use a serif font for distinction */
+/* Headings use a serif font */
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Yuji Boku', serif;
 }
@@ -48,9 +46,7 @@ h1 {
     font-size: 3.8em !important;
 }
 
-/* =========================
-    Description Text
-    ========================= */
+/* ===Description Text=== */
 
 /* Style for description text under headings or forms */
 .description-text {
@@ -62,9 +58,7 @@ h1 {
     margin: 0;
 }
 
-/* =========================
-    Layout Adjustments
-    ========================= */
+/* ===Layout Adjustments=== */
 
 /* Remove padding and ensure enough height for containers */
 #buttons-container,
@@ -73,9 +67,7 @@ h1 {
     min-height: 278px;
 }
 
-/* =========================
-    Plain Text Link Styles
-    ========================= */
+/* ===Plain Text Link Styles=== */
 
 /* Style for links that look like plain text */
 .plain-text-link {

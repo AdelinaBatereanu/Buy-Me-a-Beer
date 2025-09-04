@@ -1,6 +1,5 @@
-/* =========================
-    Mobile Breakpoint (≤800px)
-    ========================= */
+/* ===Mobile Breakpoint (≤800px)=== */
+
 @media (max-width: 800px) {
     /* Main content switches to block layout for mobile */
     .main-content {

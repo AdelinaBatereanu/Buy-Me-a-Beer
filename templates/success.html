@@ -47,7 +47,7 @@
 
         // Handle completed donation
         if (donation.status === "completed") {
-          // Show personalized thank you if donor is not anonymous
+          // Show personalized thank you if donor entered their name
           document.getElementById("thankyou-header").textContent =
             (!donation.donor_name || donation.donor_name.toLowerCase() === "anonymous")
               ? "Thank you!"
@@ -62,7 +62,7 @@
             document.getElementById("message").textContent = `Your message: ${donation.message}`;
           }
 
-          // Select image based on amount, fallback to default
+          // Select image based on amount
           const imgSrc = amountToImg[donation.amount];
           document.getElementById("cheers-img").src = imgSrc || "/static/img/beer1.png";
         }

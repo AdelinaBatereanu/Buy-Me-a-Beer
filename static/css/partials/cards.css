@@ -1,6 +1,4 @@
-/* =========================
-    Donate Card Styles
-    ========================= */
+/* ===Donate Card Styles=== */
 
 /* Remove default button styles for donate buttons */
 .donate-btn {
@@ -14,9 +12,7 @@
     outline: none;
 }
 
-/* =========================
-    Beer Image Styles
-    ========================= */
+/* ===Beer Image Styles=== */
 
 /* Center beer image wrapper */
 .beer-img-wrapper {
