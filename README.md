@@ -22,34 +22,40 @@ A donation platform built with FastAPI and Stripe that allows user to support th
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/adelinabatereanu/Buy-Me-a-Beer.git
    cd Buy-Me-a-Beer
    ```
 
 2. **Create a virtual environment**
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. **Install dependencies**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your actual values (see .env.example)
    ```
 
 5. **Run the application**
+
    ```bash
    uvicorn src.app:app --reload
    ```
 
 6. **Visit your site**
+
    ```
    http://localhost:8000
    ```
@@ -130,7 +136,7 @@ pytest tests/test_stripe.py
 
 ## 🚀 Deployment
 
-The application is ready for deployment.
+The application is ready for deployment on vercel
 
 ### Environment Variables for Production
 
@@ -141,16 +147,6 @@ Make sure to set these in your production environment:
 - Set `BASE_URL` to your actual domain
 - Use a secure `ADMIN_API_KEY`
 - Configure production database URL
-
-### Docker Deployment
-
-```bash
-# Build the image
-docker build -t buy-me-a-beer .
-
-# Run with environment variables
-docker run -p 8000:8000 --env-file .env buy-me-a-beer
-```
 
 ## 📄 License
 
