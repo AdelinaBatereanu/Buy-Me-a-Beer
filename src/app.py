@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, Request, Header
+from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import logging
@@ -12,6 +12,7 @@ from src.schemas import Donation
 from src import crud
 from src.config import settings
 from src.payments import router as payments_router
+from src.utils import require_api_key
 
 # Configure logging globally
 logging.basicConfig(
@@ -73,20 +74,10 @@ def get_donation(donation_id: str, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(500, f"Internal server error: {e}")
 
-def require_api_key(x_api_key: str = Header(...)):
-    """
-    Dependency to require a valid API key for admin endpoints.
-    """
-    logger.debug("Checking admin API key")
-    if x_api_key != settings.admin_api_key:
-        logger.warning("Invalid API key attempt")
-        raise HTTPException(403, "Forbidden: Invalid API Key")
-
-@app.get(
-    "/donations/",
-    response_model=List[Donation],
-    dependencies=[Depends(require_api_key)]
-)
+@app.get("/donations/",
+        response_model=List[Donation],
+        dependencies=[Depends(require_api_key)]
+        )
 def list_donations(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """
     List all donations with pagination. Requires admin API key.
@@ -110,6 +101,6 @@ def read_cancel(request: Request, donation_id: str = None, db: Session = Depends
             logger.info(f"No pending donation to cancel for id={donation_id}")
     return templates.TemplateResponse(request, "cancel.html", {})
 
-# Note: Background tasks are removed for Vercel serverless deployment
-# Vercel doesn't support long-running background processes
-# You can use external services or cron jobs for cleanup tasks if needed
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

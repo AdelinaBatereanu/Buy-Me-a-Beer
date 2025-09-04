@@ -18,7 +18,7 @@ SessionLocal = sessionmaker(
     bind=engine
 )
 
-# Create all tables in the database (if they don't exist)
+# Create all tables in the database
 Base.metadata.create_all(bind=engine)
 
 def get_db() -> Generator[Session, None, None]:

@@ -21,7 +21,7 @@ def create_checkout_session(
     try:
         logging.info(f"Creating pending donation for {d.donor_name}, amount: {d.amount}")
         pending = create_pending_donation(db, d.donor_name, d.amount, d.message)
-        # 1) Create a Stripe Checkout Session
+        # Create a Stripe Checkout Session
         session = stripe.checkout.Session.create(
             payment_method_types=["card", "paypal", "revolut_pay"],
             line_items=[{
@@ -42,7 +42,7 @@ def create_checkout_session(
             }
         )
         logging.info(f"Stripe session created: {session.id} for donation {pending.id}")
-        # 2) Return the URL for the client to redirect to
+        # Return the URL for the client to redirect to
         return {"url": session.url}
     except stripe.error.StripeError as e:
         logging.error(f"Stripe API error: {e.user_message or str(e)}")
@@ -55,11 +55,11 @@ def create_checkout_session(
 @router.post("/webhook/")
 async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     logging.info("Webhook endpoint called")
-    # 1) Read the raw body and Stripe-Signature header
+    # Read the raw body and Stripe-Signature header
     payload = await request.body()
     sig_header = request.headers.get("Stripe-Signature")
 
-    # 2) Verify the event came from Stripe
+    # Verify the event came from Stripe
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, settings.stripe_webhook_secret
@@ -75,13 +75,13 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(400, str(e))
     logging.info(f"Stripe event type: {event['type']}")
 
-    # 3) Handle the event type
+    # Handle the event type
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
-        # Extract the information we put in metadata
+        # Extract the information from metadata
         donation_id = session["metadata"].get("donation_id", "")
 
-        # 4) Create the donation with status completed
+        # Change donation status to "completed"
         try:
             logging.info(f"Completing donation {donation_id}")
             completed_donation = complete_donation(db, donation_id)
@@ -98,13 +98,12 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
                     logging.info(f"Email notification sent for donation {donation_id}")
                 except Exception as email_error:
                     logging.error(f"Failed to send email notification: {email_error}")
-                    # Don't fail the webhook if email fails
+            # Don't fail the webhook if email fails
             else:
                 logging.warning(f"Donation {donation_id} not found or already completed") 
-
         except Exception as e:
             print("Error completing donation:", e)
             logging.error(f"Error completing donation: {e}")
 
-    # 5) Return a 200 to acknowledge receipt
+    # Return a 200 to acknowledge receipt
     return {"status": "success"}

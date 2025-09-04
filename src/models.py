@@ -1,5 +1,4 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import ForeignKey
 from typing import Optional
 import uuid
 from datetime import datetime

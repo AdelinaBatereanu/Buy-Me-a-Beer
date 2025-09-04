@@ -5,12 +5,12 @@ class Donation(BaseModel):
     """
     Schema for a donation record.
     """
-    id: str  # Unique identifier for the donation
+    id: str  # Unique id for the donation
     donor_name: str | None = None  # Optional donor name
     amount: float  # Donation amount
     message: str | None = None  # Optional message from donor
     timestamp: datetime  # Time when the donation was made
-    status: str  # Status of the donation (e.g., 'pending', 'completed')
+    status: str  # Status of the donation ('pending', 'completed', 'canceled')
 
 class DonationCreate(BaseModel):
     """
@@ -22,7 +22,7 @@ class DonationCreate(BaseModel):
 
     @field_validator("message")
     @classmethod
-    def message_max_length(cls, v):
-        if v and len(v) > 300:
+    def message_max_length(cls, message):
+        if message and len(message) > 300:
             raise ValueError("Message must be at most 300 characters")
-        return v
+        return message
