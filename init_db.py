@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 """
 Script to initialize the database tables on Supabase.
-Run this once after setting up your Supabase database.
+Run this once after setting up Supabase database.
 """
 
 from src.models import Base
